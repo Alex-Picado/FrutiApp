@@ -1,54 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:frutiapp_web/Widgets/login_form.dart';
-void main() {
-  runApp(const MyApp());
-}
+
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'FrutiApp',
-      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
-      home: const MyHomePage(title: 'Mi formulario'),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  Widget build(BuildContext context) => MaterialApp(
+        title: 'FrutiApp Web',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+          useMaterial3: true,
+        ),
+        home: const LoginPage(),
+      );
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Container(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 400,
-            ),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: const LoginForm(),
+  Widget build(BuildContext context) => Scaffold(
+        body: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Card(
+                elevation: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: const [
+                      Text('FrutiApp',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 32, fontWeight: FontWeight.bold)),
+                      SizedBox(height: 24),
+                      LoginForm(),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  
+      );
 }
