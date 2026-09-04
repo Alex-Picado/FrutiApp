@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../home_page.dart';
 import '../models/access_record.dart';
 import '../services/access_log_service.dart';
 
@@ -23,25 +23,34 @@ class _LoginFormState extends State<LoginForm> {
   //separador
 
   void validarAcceso() {
-    final usuario = usuarioController.text.trim();
-    final password = passwordController.text;
+  final usuario = usuarioController.text.trim();
+  final password = passwordController.text;
 
-    final exitoso = usuario == 'admin' && password == '1234';
+  final exitoso = usuario == 'admin' && password == '1234';
 
-    logService.add(
-      AccessRecord(
-        usuario: usuario,
-        fechaHora: DateTime.now(),
-        exitoso: exitoso,
+  logService.add(
+    AccessRecord(
+      usuario: usuario,
+      fechaHora: DateTime.now(),
+      exitoso: exitoso,
+    ),
+  );
+
+  if (exitoso) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => HomePage(
+          logService: logService,
+        ),
       ),
     );
-
+  } else {
     setState(() {
-      mensaje = exitoso
-          ? 'Acceso autorizado'
-          : 'Usuario o contraseña incorrectos';
+      mensaje = 'Usuario o contraseña incorrectos';
     });
   }
+}
 
   //separador
 
@@ -63,13 +72,20 @@ class _LoginFormState extends State<LoginForm> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
+            //validator: (value) {
+            //if (value == null || value.isEmpty) {
+            //return 'Ingrese el correo';
+            //}
+
+            //if (!value.contains('@') || !value.contains('.')) {
+            //return 'Correo no válido';
+            //}
+
+            //return null;
+            //},
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Ingrese el correo';
-              }
-
-              if (!value.contains('@') || !value.contains('.')) {
-                return 'Correo no válido';
+                return 'Ingrese el usuario';
               }
 
               return null;
@@ -90,9 +106,9 @@ class _LoginFormState extends State<LoginForm> {
             obscureText: true,
             validator: (value) {
               //if (value == null || value.length < 6) {
-               // return 'La contraseña debe tener al menos 6 caracteres';
+              // return 'La contraseña debe tener al menos 6 caracteres';
               //}
-if (value == null || value.isEmpty) {
+              if (value == null || value.isEmpty) {
                 return 'Por favor ingrrese su contraseña';
               }
               return null;
@@ -129,6 +145,11 @@ if (value == null || value.isEmpty) {
             },
             child: const Text('Ingresar'),
           ),
+
+          if (mensaje.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Text(mensaje, textAlign: TextAlign.center),
+          ],
         ],
       ),
     );
