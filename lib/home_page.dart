@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'access_log_page.dart';
 import 'services/access_log_service.dart';
 
 import 'package:flutter/material.dart';
@@ -44,6 +45,16 @@ class _HomePageState extends State<HomePage> {
     appBar: AppBar(
       title: const Text('FrutiApp - Catálogo'),
       actions: [
+        IconButton(
+          tooltip: 'Bitácora de accesos',
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => AccessLogPage(logService: widget.logService),
+            ),
+          ),
+          icon: const Icon(Icons.fact_check),
+        ),
         IconButton(
           tooltip: 'Cerrar sesión',
           onPressed: () => Navigator.pop(context),
