@@ -3,6 +3,8 @@ class AccessRecord {
   final DateTime fechaHora;
   final bool exitoso;
 
+
+
   const AccessRecord({
     required this.usuario,
     required this.fechaHora,
