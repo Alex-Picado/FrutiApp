@@ -144,7 +144,7 @@ class _AccessLogPageState extends State<AccessLogPage> {
                   record.usuario.isEmpty ? '(sin usuario)' : record.usuario,
                 ),
                 subtitle: Text(record.fechaHora.toLocal().toString()),
-                trailing: Text(record.exitoso ? 'OK' : 'FALLÓ'),
+                trailing: Text(record.obtenerResultado()),
               ),
             ),
         ],

@@ -39,7 +39,7 @@ class AccessLogService {
       rethrow;
     } catch (_) {
       throw const FormatException(
-        'Cada registro debe contener usuario, fechaHora y exitoso válidos',
+        'Cada registro debe contener usuario, fechaHora y resultado validos',
       );
     }
   }

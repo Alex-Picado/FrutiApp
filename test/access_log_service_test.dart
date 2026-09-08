@@ -15,7 +15,7 @@ void main() {
 
     expect(json, contains('"usuario": "admin"'));
     expect(json, contains('"fechaHora": "2026-09-03T12:30:00.000Z"'));
-    expect(json, contains('"exitoso": true'));
+    expect(json, contains('"resultado": "AUTORIZADO"'));
     expect(json, isNot(contains('password')));
     expect(json, isNot(contains('1234')));
 
@@ -26,10 +26,12 @@ void main() {
 
   test('importar reemplaza los registros actuales', () {
     final service = AccessLogService()
-      ..add(AccessRecord(usuario: 'anterior', fechaHora: fecha, exitoso: false));
+      ..add(
+        AccessRecord(usuario: 'anterior', fechaHora: fecha, exitoso: false),
+      );
 
     service.importJson(
-      '[{"usuario":"nuevo","fechaHora":"2026-09-03T12:30:00.000Z","exitoso":true}]',
+      '[{"usuario":"nuevo","fechaHora":"2026-09-03T12:30:00.000Z","resultado":"AUTORIZADO"}]',
     );
 
     expect(service.records, hasLength(1));
@@ -40,7 +42,9 @@ void main() {
     final service = AccessLogService();
 
     expect(() => service.importJson('{malformed'), throwsFormatException);
-    expect(() => service.importJson('[{"usuario":"sin fecha"}]'),
-        throwsFormatException);
+    expect(
+      () => service.importJson('[{"usuario":"sin fecha"}]'),
+      throwsFormatException,
+    );
   });
 }

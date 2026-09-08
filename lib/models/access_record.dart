@@ -3,25 +3,43 @@ class AccessRecord {
   final DateTime fechaHora;
   final bool exitoso;
 
-
-
   const AccessRecord({
     required this.usuario,
     required this.fechaHora,
     required this.exitoso,
   });
 
-  Map<String, dynamic> toJson() => {
-        'usuario': usuario,
-        'fechaHora': fechaHora.toIso8601String(),
-        'exitoso': exitoso,
-      };
+  String obtenerResultado() {
+    if (exitoso == true) {
+      return 'AUTORIZADO';
+    } else {
+      return 'RECHAZADO';
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'usuario': usuario,
+      'fechaHora': fechaHora.toIso8601String(),
+      'resultado': obtenerResultado(),
+    };
+  }
 
   factory AccessRecord.fromJson(Map<String, dynamic> json) {
-    return AccessRecord(
-      usuario: json['usuario'] as String,
-      fechaHora: DateTime.parse(json['fechaHora'] as String),
-      exitoso: json['exitoso'] as bool,
+  String resultado = json['resultado'];
+
+  if (resultado != 'AUTORIZADO' && resultado != 'RECHAZADO') {
+    throw FormatException(
+      'El resultado debe ser AUTORIZADO o RECHAZADO',
     );
   }
+
+  bool exitoso = resultado == 'AUTORIZADO';
+
+  return AccessRecord(
+    usuario: json['usuario'],
+    fechaHora: DateTime.parse(json['fechaHora']),
+    exitoso: exitoso,
+  );
+}
 }
