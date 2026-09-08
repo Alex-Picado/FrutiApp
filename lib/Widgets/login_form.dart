@@ -45,14 +45,32 @@ class _LoginFormState extends State<LoginForm> {
       ),
     );
 
-    if (exitoso) {
+    if (exitoso == true) {
+      setState(() {
+        mensaje = '';
+      });
+
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Acceso autorizado'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 8),
+        ),
+      );
+
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => HomePage(logService: logService)),
+        MaterialPageRoute(
+          builder: (context) {
+            return HomePage(logService: logService);
+          },
+        ),
       );
     } else {
       setState(() {
-        mensaje = 'Usuario o contraseña incorrectos';
+        mensaje = 'Acceso rechazado: usuario o contraseña incorrectos';
       });
     }
   }
