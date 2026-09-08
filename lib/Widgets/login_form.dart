@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../home_page.dart';
 import '../models/access_record.dart';
 import '../services/access_log_service.dart';
+import '../services/preferences_service.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -17,11 +18,37 @@ class _LoginFormState extends State<LoginForm> {
   final usuarioController = TextEditingController();
   final passwordController = TextEditingController();
   final logService = AccessLogService();
+  final preferencesService = PreferencesService();
+
   String mensaje = '';
 
   bool _recordarme = false;
   bool _ocultarPassword = true;
   //separador
+
+  @override
+  void initState() {
+    super.initState();
+    cargarUsuarioRecordado();
+  }
+
+  Future<void> cargarUsuarioRecordado() async {
+    final usuario = await preferencesService.cargarUsuario();
+
+    if (mounted == false) {
+      return;
+    }
+
+    setState(() {
+      usuarioController.text = usuario;
+
+      if (usuario.isNotEmpty) {
+        _recordarme = true;
+      } else {
+        _recordarme = false;
+      }
+    });
+  }
 
   IconData obtenerIconoPassword() {
     if (_ocultarPassword == true) {
@@ -31,9 +58,15 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-  void validarAcceso() {
+  Future<void> validarAcceso() async {
     final usuario = usuarioController.text.trim();
     final password = passwordController.text;
+
+    await preferencesService.guardarUsuario(usuario, _recordarme);
+
+    if (mounted == false) {
+      return;
+    }
 
     final exitoso = usuario == 'admin' && password == '1234';
 
@@ -167,7 +200,7 @@ class _LoginFormState extends State<LoginForm> {
             children: [
               Checkbox(
                 value: _recordarme,
-                onChanged: (value) {
+                onChanged: (value) async {
                   setState(() {
                     if (value == null) {
                       _recordarme = false;
@@ -175,6 +208,10 @@ class _LoginFormState extends State<LoginForm> {
                       _recordarme = value;
                     }
                   });
+
+                  if (_recordarme == false) {
+                    await preferencesService.guardarUsuario('', false);
+                  }
                 },
               ),
               const Text('Recordarme'),
@@ -184,9 +221,9 @@ class _LoginFormState extends State<LoginForm> {
           const SizedBox(height: 10),
 
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (formKey.currentState!.validate()) {
-                validarAcceso();
+                await validarAcceso();
               }
             },
             child: const Text('Ingresar'),
