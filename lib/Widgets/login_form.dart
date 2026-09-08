@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../home_page.dart';
 import '../models/access_record.dart';
 import '../services/access_log_service.dart';
@@ -23,34 +24,30 @@ class _LoginFormState extends State<LoginForm> {
   //separador
 
   void validarAcceso() {
-  final usuario = usuarioController.text.trim();
-  final password = passwordController.text;
+    final usuario = usuarioController.text.trim();
+    final password = passwordController.text;
 
-  final exitoso = usuario == 'admin' && password == '1234';
+    final exitoso = usuario == 'admin' && password == '1234';
 
-  logService.add(
-    AccessRecord(
-      usuario: usuario,
-      fechaHora: DateTime.now(),
-      exitoso: exitoso,
-    ),
-  );
-
-  if (exitoso) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => HomePage(
-          logService: logService,
-        ),
+    logService.add(
+      AccessRecord(
+        usuario: usuario,
+        fechaHora: DateTime.now(),
+        exitoso: exitoso,
       ),
     );
-  } else {
-    setState(() {
-      mensaje = 'Usuario o contraseña incorrectos';
-    });
+
+    if (exitoso) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => HomePage(logService: logService)),
+      );
+    } else {
+      setState(() {
+        mensaje = 'Usuario o contraseña incorrectos';
+      });
+    }
   }
-}
 
   //separador
 
@@ -84,7 +81,7 @@ class _LoginFormState extends State<LoginForm> {
             //return null;
             //},
             validator: (value) {
-              if (value == null || value.isEmpty) {
+              if (value == null || value.trim().isEmpty) {
                 return 'Ingrese el usuario';
               }
 
@@ -109,7 +106,7 @@ class _LoginFormState extends State<LoginForm> {
               // return 'La contraseña debe tener al menos 6 caracteres';
               //}
               if (value == null || value.isEmpty) {
-                return 'Por favor ingrrese su contraseña';
+                return 'Por favor ingrese su contraseña';
               }
               return null;
             },
