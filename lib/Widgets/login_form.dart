@@ -20,8 +20,16 @@ class _LoginFormState extends State<LoginForm> {
   String mensaje = '';
 
   bool _recordarme = false;
-
+  bool _ocultarPassword = true;
   //separador
+
+  IconData obtenerIconoPassword() {
+    if (_ocultarPassword == true) {
+      return Icons.visibility;
+    } else {
+      return Icons.visibility_off;
+    }
+  }
 
   void validarAcceso() {
     final usuario = usuarioController.text.trim();
@@ -69,6 +77,7 @@ class _LoginFormState extends State<LoginForm> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
+
             //validator: (value) {
             //if (value == null || value.isEmpty) {
             //return 'Ingrese el correo';
@@ -95,19 +104,41 @@ class _LoginFormState extends State<LoginForm> {
             controller: passwordController,
             decoration: InputDecoration(
               labelText: 'Contraseña',
+
               prefixIcon: Icon(Icons.lock),
+
+              suffixIcon: IconButton(
+                tooltip: 'Mostrar u ocultar contraseña',
+                icon: Icon(obtenerIconoPassword()),
+                onPressed: () {
+                  if (_ocultarPassword == true) {
+                    setState(() {
+                      _ocultarPassword = false;
+                    });
+                  } else {
+                    setState(() {
+                      _ocultarPassword = true;
+                    });
+                  }
+                },
+              ),
+
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            obscureText: true,
+
+            obscureText: _ocultarPassword,
+
             validator: (value) {
               //if (value == null || value.length < 6) {
-              // return 'La contraseña debe tener al menos 6 caracteres';
+              //  return 'La contraseña debe tener al menos 6 caracteres';
               //}
+
               if (value == null || value.isEmpty) {
                 return 'Por favor ingrese su contraseña';
               }
+
               return null;
             },
           ),
