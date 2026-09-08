@@ -1,0 +1,12 @@
+[
+  {
+    "usuario": "admin",
+    "fechaHora": "2026-09-08T03:23:40.653",
+    "resultado": "RECHAZADO"
+  },
+  {
+    "usuario": "admin",
+    "fechaHora": "2026-09-08T03:23:46.923",
+    "resultado": "AUTORIZADO"
+  }
+]
